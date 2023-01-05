@@ -1,0 +1,38 @@
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  max-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header-nav-ul {
+  display: flex;
+  list-style: none;
+}
+
+.header-nav-ul-li {
+  padding: 10px;
+}
+
+.section > div {
+  background: red;
+  min-height: 50vh;
+  min-width: 80vw;
+  align-self: center;
+}
+
+.footer {
+  background: gray;
+  margin: 10px;
+}
+
+.footer-div {
+  padding: 10px;
+  border-bottom: 2px solid red;
+}

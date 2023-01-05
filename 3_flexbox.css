@@ -1,0 +1,82 @@
+* {
+  margin: 0;
+}
+
+body {
+  background: pink;
+}
+
+.newnewlayout {
+  display: flex;
+  flex-direction: row;
+}
+/* 
+The opposite of flex-shrink is the flex-grow property. Recall that flex-shrink controls the size of the items when the container shrinks. The flex-grow property controls the size of items when the parent container expands.
+*/
+.first {
+  flex-shrink: 1; /*This means how much compare to sibling element this element should shrink in case of responsive to fit which is 0 that is bilkul nhi so sibling element would be shrinking in its place*/
+}
+.second {
+  flex-shrink: 2; /*they are proportions so unitless*/
+}
+.newnewlayout div {
+  background: red;
+  width: 200px; /*This will be ignored as flex-basis will become actual width if flex-direction:row*/
+  flex-basis: 300px; /* length of the item in direction of main axis which is width in case of flex-direction row and height in case of flex-direction column*/
+  border: 1px solid black;
+  margin: 10px;
+  height: 150px; /*This will be ignored as flex-basis will become actual height if flex-direction:column*/
+}
+
+#box-container {
+  display: flex;
+  height: 500px;
+}
+
+#box-1 {
+  background-color: dodgerblue;
+  height: 200px;
+  flex-grow: 1;
+}
+
+#box-2 {
+  background-color: orangered;
+  height: 200px;
+  flex-grow: 2;
+}
+
+.flexwrap-first {
+  flex-shrink: 1;
+}
+.flexwrap-second {
+  flex-shrink: 2;
+}
+.flexwrap div {
+  background: red;
+  flex-basis: 300px;
+  border: 1px solid black;
+  margin: 10px;
+  height: 150px;
+}
+
+.flexwrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* shift the element to next row if it cannot fit in the same row i.e. overflow in next row*/
+}
+
+#parent {
+  display: flex;
+  background: rebeccapurple;
+  width: 100%;
+  height: 500px;
+  justify-content: center;/*along main axis*/
+  align-items: center;/* along cros axis*/
+}
+
+#child {
+  background: yellow;
+  width: 200px;
+  height: 200px;
+  margin: 50px;
+}

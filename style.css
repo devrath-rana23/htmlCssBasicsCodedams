@@ -1,0 +1,22 @@
+.blue {
+  background: blue;
+  display: inline;
+}
+h1 {
+  font-size: 16px;
+  font-weight: normal;
+}
+#onlyp {
+  font-size: 30px;
+}
+
+.red {
+  background: red;
+  display: block;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+body {
+  background: pink;
+}

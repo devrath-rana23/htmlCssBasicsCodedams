@@ -1,0 +1,67 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#grid {
+  display: grid;
+  /* justify-items: center;
+  align-items: center; */
+  place-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  /* row-gap: 20px; */
+  /* column-gap: 10px; . is fine tuned version of gap */
+  grid-template-rows: 200px 200px 200px;
+  /*name should match grid area value. decides how each element should appear based on the order of their grid area value. Here . means for second column value keep it empty so that layout does not break*/
+  grid-template-areas:
+    "header . ."
+    "maincontent maincontent ."
+    "sidebar .  main"
+    ". . ."
+    ". . ."
+    "footer . .";
+}
+
+@media only screen and (max-width: 500px) {
+  #grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "maincontent"
+      "sidebar"
+      "footer";
+  }
+}
+
+header {
+  background: yellow;
+  grid-area: header;
+  font-size: 21px;
+}
+main {
+  background: green;
+  grid-area: maincontent;
+  font-size: 21px;
+}
+
+aside {
+  background: black;
+  color: white;
+  grid-area: sidebar;
+  font-size: 21px;
+}
+
+footer {
+  background: blue;
+  grid-area: footer;
+  font-size: 21px;
+}
+
+div {
+  background: grey;
+  grid-area: adv;
+  grid-row: 1 / span 4;
+  grid-column: 1 / span 4;
+}

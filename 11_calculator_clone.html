@@ -5,104 +5,258 @@
     <title>JavaScript Calculator</title>
 
     <style>
-      h1 {
-        text-align: center;
-        padding: 23px;
-        background-color: skyblue;
-        color: white;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
       }
 
-      #clear {
-        width: 270px;
-        border: 3px solid gray;
-        border-radius: 3px;
-        padding: 20px;
-        background-color: red;
-      }
-
-      .formstyle {
-        width: 300px;
-        height: 530px;
-        margin: auto;
-        border: 3px solid skyblue;
-        border-radius: 5px;
-        padding: 20px;
+      body {
+        background: linear-gradient(to right, #00aaff, #00ff6c);
+        font-size: 2rem;
+        color: #00352f;
+        font-weight: 800;
       }
 
       input {
-        width: 20px;
-        background-color: #bff2f0;
-        color: black;
-        border-radius: 5px;
-        padding: 26px;
-        margin: 5px;
-        font-size: 15px;
+        all: unset;
       }
 
-      #calc {
-        width: 250px;
-        border-radius: 3px;
-        padding: 20px;
-        margin: auto;
-        background-color: #00352f;
+      .formstyle {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #grid {
+        display: grid;
+        place-items: center;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-areas:
+          "result result result result"
+          "ac ac del divide"
+          "one two three multiply"
+          "four five six plus"
+          "seven eight nine minus"
+          "dot zero equalto equalto";
+        background: rgba(255, 255, 255, 0.75);
+      }
+
+      #result {
+        grid-area: result;
+        background: #00352f;
+        color: #fff;
+        padding: 40px;
+      }
+
+      #ac {
+        grid-area: ac;
+      }
+
+      #del {
+        grid-area: del;
+      }
+
+      #plus {
+        grid-area: plus;
+      }
+
+      #minus {
+        grid-area: minus;
+      }
+
+      #divide {
+        grid-area: divide;
+      }
+
+      #multiply {
+        grid-area: multiply;
+      }
+
+      #zero {
+        grid-area: zero;
+      }
+
+      #one {
+        grid-area: one;
+      }
+
+      #two {
+        grid-area: two;
+      }
+
+      #three {
+        grid-area: three;
+      }
+
+      #four {
+        grid-area: four;
+      }
+
+      #five {
+        grid-area: five;
+      }
+
+      #six {
+        grid-area: six;
+      }
+
+      #seven {
+        grid-area: seven;
+      }
+
+      #eight {
+        grid-area: eight;
+      }
+
+      #nine {
+        grid-area: nine;
+      }
+
+      #equalto {
+        grid-area: equalto;
+      }
+
+      .calc-btn {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        border: 1px solid #fff;
       }
     </style>
   </head>
   <body>
-    <h1>Calculator Program in JavaScript</h1>
     <div class="formstyle">
-      <form name="form1">
-        <!-- This input box shows the button pressed by the user in calculator. -->
-        <input class="display-box" id="calc" type="text" name="answer" /> <br />
-        <br />
-        <!-- Display the calculator button on the screen. -->
-        <!-- onclick() function display the number prsses by the user. -->
-        <input type="button" value="1" onclick="form1.answer.value += '1' " />
-        <input type="button" value="2" onclick="form1.answer.value += '2' " />
-        <input type="button" value="3" onclick="form1.answer.value += '3' " />
-        <input type="button" value="+" onclick="form1.answer.value += '+' " />
-        <br />
-        <br />
-
-        <input type="button" value="4" onclick="form1.answer.value += '4' " />
-        <input type="button" value="5" onclick="form1.answer.value += '5' " />
-        <input type="button" value="6" onclick="form1.answer.value += '6' " />
-        <input type="button" value="-" onclick="form1.answer.value += '-' " />
-        <br />
-        <br />
-
-        <input type="button" value="7" onclick="form1.answer.value += '7' " />
-        <input type="button" value="8" onclick="form1.answer.value += '8' " />
-        <input type="button" value="9" onclick="form1.answer.value += '9' " />
-        <input type="button" value="*" onclick="form1.answer.value += '*' " />
-        <br />
-        <br />
-
-        <input type="button" value="/" onclick="form1.answer.value += '/' " />
-        <input type="button" value="0" onclick="form1.answer.value += '0' " />
-        <input type="button" value="." onclick="form1.answer.value += '.' " />
-        <!-- When we click on the '=' button, the onclick() shows the sum results on the calculator screen. -->
+      <form name="form1" id="grid">
+        <input class="display-box" id="result" type="text" name="answer" />
         <input
+          class="calc-btn"
           type="button"
-          value="="
-          onclick="
-  try {
-    form1.answer.value = eval(form1.answer.value)
-}
-catch(err) {
-  alert('Invalid operation!') 
-}
-"
-        />
-        <br />
-        <!-- Display the Cancel button and erase all data entered by the user. -->
-        <input
-          type="button"
-          value="Clear All"
+          value="AC"
           onclick="form1.answer.value = ' ' "
-          id="clear"
+          id="ac"
         />
-        <br />
+        <input
+          class="calc-btn"
+          type="button"
+          value="DEL"
+          onclick="form1.answer.value = form1.answer.value .slice(0,-1) "
+          id="del"
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          value="&div;"
+          onclick="form1.answer.value += '/' "
+          id="divide"
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="one"
+          value="1"
+          onclick="form1.answer.value += '1' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="two"
+          value="2"
+          onclick="form1.answer.value += '2' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="three"
+          value="3"
+          onclick="form1.answer.value += '3' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="multiply"
+          value="*"
+          onclick="form1.answer.value += '*' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="four"
+          value="4"
+          onclick="form1.answer.value += '4' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="five"
+          value="5"
+          onclick="form1.answer.value += '5' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="six"
+          value="6"
+          onclick="form1.answer.value += '6' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="plus"
+          value="+"
+          onclick="form1.answer.value += '+' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="seven"
+          value="7"
+          onclick="form1.answer.value += '7' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="eight"
+          value="8"
+          onclick="form1.answer.value += '8' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="nine"
+          value="9"
+          onclick="form1.answer.value += '9' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="minus"
+          value="-"
+          onclick="form1.answer.value += '-' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="dot"
+          value="."
+          onclick="form1.answer.value += '.' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="zero"
+          value="0"
+          onclick="form1.answer.value += '0' "
+        />
+        <input
+          class="calc-btn"
+          type="button"
+          id="equalto"
+          value="="
+          onclick="try {form1.answer.value = eval(form1.answer.value)}catch(err) {alert('Invalid operation!')}"
+        />
       </form>
     </div>
   </body>

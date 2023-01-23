@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz App</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      header {
+        padding: 10px 10px 10px 10px;
+        background: #218380;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #fff;
+      }
+      #header-title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+      }
+      #header-heading,
+      #header-timer {
+        font-size: 13px;
+      }
+      .hide-class {
+        display: none !important;
+      }
+      section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+      }
+      article {
+        display: flex;
+        flex-direction: column;
+        padding: 3rem 2rem 1rem 2rem;
+        border: 2px solid grey;
+        border-radius: 0.8rem;
+        box-shadow: rgb(0 0 0 / 15%) 6.95px 6.95px 6.6px;
+        gap: 20px;
+      }
+      .begin-quiz-heading,
+      .questions-quiz-heading,
+      .all-done-quiz-heading,
+      .highscores-quiz-heading {
+        font-size: 1.5em;
+      }
+      .begin-quiz-para,
+      .all-done-quiz-para,
+      .questions-quiz-options-list {
+        font-size: 1em;
+      }
+      .questions-quiz-options-list li,
+      .highscores-quiz-scores-list li {
+        padding: 10px;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+      .questions-quiz-options-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-left: 3rem;
+      }
+      .begin-quiz-btn,
+      .questions-quiz-btn,
+      .questions-quiz-btn,
+      .highscores-quiz-btn {
+        color: whitesmoke;
+        background-color: #218380;
+        border-radius: 0.5rem;
+        padding: 0.7rem 1rem;
+        border: none;
+        cursor: pointer;
+      }
+      input {
+        background-color: #fff;
+        padding: 0.7rem 1rem;
+        border: 1px solid rgb(193, 189, 189);
+      }
+      .animate-wrong {
+        animation-name: err-bg;
+        animation-duration: 0.5s;
+      }
+      .animate-correct {
+        animation-name: success-bg;
+        animation-duration: 0.5s;
+      }
+      @keyframes err-bg {
+        from {
+          background-color: rgb(255, 255, 255);
+        }
+        to {
+          background-color: rgb(236, 95, 95);
+        }
+      }
+      @keyframes success-bg {
+        from {
+          background-color: rgb(255, 255, 255);
+        }
+        to {
+          background-color: rgb(10, 163, 10);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div id="header-title">
+        <h1 id="header-heading"><strong>View HighScores</strong></h1>
+        <i class="fas fa-hand-point-left fa-lg"></i>
+      </div>
+      <p id="header-timer">Time: <span></span></p>
+    </header>
+    <section id="begin-quiz-section">
+      <article class="begin-quiz-article">
+        <h1 class="begin-quiz-heading">
+          <strong>Coding Quiz Challange</strong>
+        </h1>
+        <p class="begin-quiz-para">
+          Try to answer the following questions within the time limit.
+        </p>
+        <p class="begin-quiz-para">
+          Keep in mind that incorrect answers will penalize your score/time by
+          ten seconds.
+        </p>
+        <div class="begin-quiz-btn-container">
+          <button id="startQuizBtn" class="begin-quiz-btn">Start Quiz</button>
+        </div>
+      </article>
+    </section>
+    <section id="questions-quiz-section" class="hide-class">
+      <article class="questions-quiz-article">
+        <h1 class="questions-quiz-heading"></h1>
+        <ol class="questions-quiz-options-list"></ol>
+        <p class="questions-quiz-answer-response-message hide-class">
+          Your answer is correct!
+        </p>
+        <div class="questions-quiz-btn-container">
+          <button id="skipBtn" class="questions-quiz-btn">Skip</button>
+          <button id="finishBtn" class="questions-quiz-btn hide-class">
+            Finish
+          </button>
+        </div>
+      </article>
+    </section>
+    <section id="all-done-quiz-section" class="hide-class">
+      <article class="all-done-quiz-article">
+        <h1 class="all-done-quiz-heading"><strong>All Done!</strong></h1>
+        <p class="all-done-quiz-para one"></p>
+        <p class="all-done-quiz-para">
+          Enter initials: <input />
+          <button id="submitBtn" class="questions-quiz-btn">Submit</button>
+        </p>
+      </article>
+    </section>
+    <section id="highscores-quiz-section" class="hide-class">
+      <article class="highscores-quiz-article">
+        <h1 class="highscores-quiz-heading"><strong>Highscores</strong></h1>
+        <ol class="highscores-quiz-scores-list"></ol>
+        <div class="highscores-quiz-btn-container">
+          <button id="goBackBtn" class="highscores-quiz-btn">Go Back</button>
+          <button id="clearHiScoreBtn" class="highscores-quiz-btn">
+            Clear Highscores
+          </button>
+        </div>
+      </article>
+    </section>
+    <script type="text/JavaScript">
+          //Globals
+          let time = 60;
+          let wrongAnswer = undefined;
+          let questionNumber = 0;
+          let score = 0;
+
+          //Selectors
+          const startQuizBtn = document.querySelector("#startQuizBtn");
+          const skipBtn = document.querySelector("#skipBtn");
+          const finishBtn = document.querySelector("#finishBtn");
+          const submitBtn = document.querySelector("#submitBtn");
+          const goBackBtn = document.querySelector("#goBackBtn");
+          const clearHiScoreBtn = document.querySelector("#clearHiScoreBtn");
+
+          //Questions
+          const questions = [
+            {
+              questionText: "Commonly used data types DO NOT include:",
+              options: ["strings", "booleans", "alerts", "numbers"],
+              answer: 2,
+            },
+            {
+              questionText: "Arrays in JavaScript can be used to store ______.",
+              options: [
+                "numbers and strings",
+                "other arrays",
+                "booleans",
+                "all of the above",
+              ],
+              answer: 3,
+            },
+            {
+              questionText:
+                "String values must be enclosed within _____ when being assigned to variables.",
+              options: ["commas", "curly brackets", "quotes", "parentheses"],
+              answer: 2,
+            },
+            {
+              questionText:
+                "A very useful tool used during development and debugging for printing content to the debugger is:",
+              options: ["JavaScript", "terminal/bash", "for loops", "console.log"],
+              answer: 3,
+            },
+            {
+              questionText:
+                "Which of the following is a statement that can be used to terminate a loop, switch or label statement?",
+              options: ["break", "stop", "halt", "exit"],
+              answer: 0,
+            },
+          ];
+
+          const startTimer = ()=>{
+            const interVal = setInterval(() => {
+                time-=1;
+                if(time<=0){
+                  clearInterval(interVal);
+                  showAllDoneScreen(interVal)
+                }else{
+                  document.getElementById("header-timer").childNodes[1].innerText=time;
+                }
+              }, 1000);
+          };
+
+          const removeTimer = (interVal)=>{
+                time=0;
+                clearInterval(interVal);
+                document.getElementById("header-timer").childNodes[1].innerText="";
+          };
+
+          startQuizBtn.addEventListener("click",()=>{
+            document.getElementById("header-title").classList.add("hide-class");
+            document.getElementById("begin-quiz-section").classList.add("hide-class");
+            document.getElementById("questions-quiz-section").classList.remove("hide-class");
+            document.getElementById("header-timer").childNodes[1].innerText=time;
+            document.querySelector(".questions-quiz-heading").innerHTML=`<strong>Q${questionNumber+1}: ${questions[questionNumber]['questionText']}</strong>`;
+            questions[questionNumber]["options"].map((item,indexReq)=>{
+            const node = document.createElement("li");
+            const textnode = document.createTextNode(item);
+            node.appendChild(textnode);
+            document.querySelector(".questions-quiz-options-list").appendChild(node);
+            })
+            startTimer();
+            const choices = document.querySelectorAll(".questions-quiz-options-list li");
+            choices.forEach((e, key) => {
+              e.addEventListener("click", () => {
+                  checkAnswer(key, choices);
+              });
+            });
+          });
+
+          const checkAnswer = (e,choices) => {
+          if (questions[questionNumber].answer === e) {
+            choices[e].classList.toggle("animate-correct", true);
+            questionNumber++;
+            if(questionNumber===questions.length-1){
+              skipBtn.classList.add("hide-class");
+              finishBtn.classList.remove("hide-class");
+            }
+            score += 10;
+            setTimeout(() => {
+            document.querySelector(".questions-quiz-heading").innerHTML=`<strong>Q${questionNumber+1}: ${questions[questionNumber]['questionText']}</strong>`;
+            document.querySelector(".questions-quiz-options-list").innerHTML="";
+            questions[questionNumber]["options"].map((item,indexReq)=>{
+            const node = document.createElement("li");
+            const textnode = document.createTextNode(item);
+            node.appendChild(textnode);
+            document.querySelector(".questions-quiz-options-list").appendChild(node);
+            })
+            const choices = document.querySelectorAll(".questions-quiz-options-list li");
+            choices.forEach((e, key) => {
+              e.addEventListener("click", () => {
+                  checkAnswer(key, choices);
+              });
+            });
+            }, 700);
+            if(questionNumber>=questions.length){
+              showAllDoneScreen();
+            }
+          } else {
+            choices[e].classList.toggle("animate-wrong");
+            wrongAnswer = true;
+            if (score >= 5) score -= 5;
+          }
+          setTimeout(() => {
+            choices[e].classList.toggle("animate-correct", false);
+            choices[e].classList.toggle("animate-wrong", false);
+          }, 500);
+        };
+        const showAllDoneScreen=(interVal="")=>{
+          document.getElementById("questions-quiz-section").classList.add("hide-class");
+              document.getElementById("all-done-quiz-section").classList.remove("hide-class");
+              document.querySelector(".one").innerText = `Your final score is ${score}.`
+              removeTimer(interVal);
+        };
+        finishBtn.addEventListener("click",()=>{
+          showAllDoneScreen();
+        })
+        skipBtn.addEventListener("click",()=>{
+          questionNumber++;
+          if(questionNumber===questions.length-1){
+              skipBtn.classList.add("hide-class");
+              finishBtn.classList.remove("hide-class");
+            }
+          setTimeout(() => {
+            document.querySelector(".questions-quiz-heading").innerHTML=`<strong>Q${questionNumber+1}: ${questions[questionNumber]['questionText']}</strong>`;
+            document.querySelector(".questions-quiz-options-list").innerHTML="";
+            questions[questionNumber]["options"].map((item,indexReq)=>{
+            const node = document.createElement("li");
+            const textnode = document.createTextNode(item);
+            node.appendChild(textnode);
+            document.querySelector(".questions-quiz-options-list").appendChild(node);
+            })
+            const choices = document.querySelectorAll(".questions-quiz-options-list li");
+            choices.forEach((e, key) => {
+              e.addEventListener("click", () => {
+                  checkAnswer(key, choices);
+              });
+            });
+            }, 700);
+      })
+
+      submitBtn.addEventListener("click",()=>{
+        if(document.querySelector("input").value){
+          if(localStorage.getItem(document.querySelector("input").value)){
+          localStorage.removeItem(document.querySelector("input").value)
+          localStorage.setItem(document.querySelector("input").value,score)
+        }else{
+          localStorage.setItem(document.querySelector("input").value,score)
+        }
+        showHiScoreScreen();
+        }else{
+          alert("Enter valid input.")
+        }
+      })
+
+      const showHiScoreScreen = ()=>{
+        removeTimer("");
+        document.getElementById("begin-quiz-section").classList.add("hide-class");
+        document.getElementById("all-done-quiz-section").classList.add("hide-class");
+        document.getElementById("highscores-quiz-section").classList.remove("hide-class");
+        for (var i = 0; i < localStorage.length; i++){
+          const node = document.createElement("li");
+          const textnode = document.createTextNode(`${localStorage.key(i)}-${localStorage.getItem(localStorage.key(i))}`);
+          node.appendChild(textnode);
+          document.querySelector(".highscores-quiz-scores-list").appendChild(node);
+        }
+      };
+
+      document.querySelector("#header-title").addEventListener("click",()=>{
+        showHiScoreScreen();
+      })
+
+      goBackBtn.addEventListener("click",()=>{
+       location.reload()
+      })
+
+      clearHiScoreBtn.addEventListener("click",()=>{
+        localStorage.clear();
+        location.reload()
+      })
+    </script>
+  </body>
+</html>
